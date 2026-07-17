@@ -2228,7 +2228,7 @@ git commit -m "feat: add HITL mechanism (AutoApprove + BlockingHitl with timeout
 - Consumes: nothing (pure functions)
 - Produces: `Parsers` class — used by `FeedbackPipeline`
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```python
 # tests/test_parsers.py
@@ -2291,7 +2291,7 @@ tests/test_main.py:5: AssertionError
         assert len(errors) > 0
 ```
 
-- [ ] **Step 2: Implement parsers**
+- [x] **Step 2: Implement parsers**
 
 ```python
 # harness/feedback/parsers.py
@@ -2360,12 +2360,12 @@ class Parsers:
         return errors
 ```
 
-- [ ] **Step 3: Run tests to verify they pass**
+- [x] **Step 3: Run tests to verify they pass**
 
 Run: `pytest tests/test_parsers.py -v`
 Expected: ALL PASS
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit** (d59f4fb)
 
 ```bash
 git add harness/feedback/parsers.py tests/test_parsers.py
@@ -2384,7 +2384,7 @@ git commit -m "feat: add feedback parsers (Python stderr + pytest output)"
 - Consumes: `Parsers` from parsers.py, `RunCommandTool` from tools, `HarnessConfig` from config; `FeedbackResult` from schemas
 - Produces: `FeedbackPipeline` — called by `Agent.run()` in loop.py
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```python
 # tests/test_pipeline.py
@@ -2479,12 +2479,12 @@ def test_feedback_truncated_to_max_lines(config):
     assert len(result.errors) <= 3
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `pytest tests/test_pipeline.py -v`
 Expected: FAIL
 
-- [ ] **Step 3: Implement pipeline**
+- [x] **Step 3: Implement pipeline**
 
 ```python
 # harness/feedback/pipeline.py
@@ -2534,12 +2534,12 @@ class FeedbackPipeline:
         return FeedbackResult(stage="test", success=True)
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass** (d59f4fb)
 
 Run: `pytest tests/test_pipeline.py -v`
 Expected: ALL PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit** (d59f4fb)
 
 ```bash
 git add harness/feedback/pipeline.py tests/test_pipeline.py
@@ -2558,7 +2558,7 @@ git commit -m "feat: add feedback pipeline (build → test with short-circuit)"
 - Consumes: `FeedbackResult` from schemas; `ConvergenceConfig` from config
 - Produces: `Convergence` class — used by `Agent.run()` in loop.py to decide continue/stop
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```python
 # tests/test_convergence.py
@@ -2634,7 +2634,7 @@ class TestSuccess:
         assert c.should_stop(attempt=1) is False
 ```
 
-- [ ] **Step 2: Implement convergence**
+- [x] **Step 2: Implement convergence**
 
 ```python
 # harness/feedback/convergence.py
@@ -2682,12 +2682,12 @@ class Convergence:
         return False
 ```
 
-- [ ] **Step 3: Run tests to verify they pass**
+- [x] **Step 3: Run tests to verify they pass**
 
 Run: `pytest tests/test_convergence.py -v`
 Expected: ALL PASS
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit** (d59f4fb)
 
 ```bash
 git add harness/feedback/convergence.py tests/test_convergence.py
@@ -2706,7 +2706,7 @@ git commit -m "feat: add convergence (stagnation, no_edits, max_iterations)"
 - Consumes: `LLMResponse`, `ToolCall` from schemas
 - Produces: `LLMClient` protocol, `MockLLM` — used by `Agent` in loop.py; `MockLLM` used in all tests
 
-- [ ] **Step 1: Implement LLM client protocol and MockLLM**
+- [x] **Step 1: Implement LLM client protocol and MockLLM**
 
 ```python
 # harness/llm/client.py
@@ -2736,12 +2736,12 @@ class MockLLM:
         return LLMResponse(type="parse_error", error="no more mock responses")
 ```
 
-- [ ] **Step 2: Quick smoke test**
+- [x] **Step 2: Quick smoke test**
 
 Run: `python -c "from harness.llm.client import MockLLM; from harness.llm.schemas import LLMResponse; m = MockLLM([LLMResponse(type='fix_complete', reasoning='done')]); r = m.complete([]); print(r.type); assert r.type == 'fix_complete'; print('OK')"`
 Expected: `fix_complete\nOK`
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit** (d59f4fb)
 
 ```bash
 git add harness/llm/client.py
