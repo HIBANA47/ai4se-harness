@@ -768,7 +768,7 @@ git commit -m "feat: add configuration loading with global + project override"
 
 ---
 
-## Task 4: Memory Module
+## Task 4: Memory Module — [x] f10d737
 
 **Files:**
 - Create: `harness/core/memory.py`
