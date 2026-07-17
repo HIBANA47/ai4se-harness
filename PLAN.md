@@ -1693,7 +1693,7 @@ git commit -m "feat: add run_command tool with timeout"
 - Consumes: `ToolCall`, `ToolResult`, `GuardResult` from schemas; `GuardrailsConfig` from config
 - Produces: `GuardrailRules`, `PreActionGuard` — used by `loop.py`
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```python
 # tests/test_guardrails.py
@@ -1840,12 +1840,12 @@ class TestGuardrailRules:
         assert rules.requires_approval(call) is False
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `pytest tests/test_guardrails.py -v`
 Expected: FAIL
 
-- [ ] **Step 3: Implement GuardrailRules**
+- [x] **Step 3: Implement GuardrailRules**
 
 ```python
 # harness/guardrails/rules.py
@@ -1894,7 +1894,7 @@ class GuardrailRules:
         return False
 ```
 
-- [ ] **Step 4: Implement PreActionGuard**
+- [x] **Step 4: Implement PreActionGuard**
 
 ```python
 # harness/guardrails/pre_action.py
@@ -1925,12 +1925,12 @@ class PreActionGuard:
         return GuardResult(allowed=True)
 ```
 
-- [ ] **Step 5: Run tests to verify they pass**
+- [x] **Step 5: Run tests to verify they pass**
 
 Run: `pytest tests/test_guardrails.py -v`
 Expected: ALL PASS
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add harness/guardrails/rules.py harness/guardrails/pre_action.py tests/test_guardrails.py
@@ -1948,7 +1948,7 @@ git commit -m "feat: add guardrail rules and pre-action guards (blacklist, limit
 - Consumes: `ToolCall`, `ToolResult`, `GuardResult`; `GuardrailsConfig` from config
 - Produces: `PostActionGuard` — used by `loop.py` after tool execution
 
-- [ ] **Step 1: Add post-action tests to test_guardrails.py**
+- [x] **Step 1: Add post-action tests to test_guardrails.py**
 
 ```python
 # Append to tests/test_guardrails.py
@@ -1996,7 +1996,7 @@ class TestPostActionGuard:
         assert gr.allowed is True
 ```
 
-- [ ] **Step 2: Implement PostActionGuard**
+- [x] **Step 2: Implement PostActionGuard**
 
 ```python
 # harness/guardrails/post_action.py
@@ -2043,12 +2043,12 @@ class PostActionGuard:
         return False
 ```
 
-- [ ] **Step 3: Run tests to verify they pass**
+- [x] **Step 3: Run tests to verify they pass**
 
 Run: `pytest tests/test_guardrails.py -v -k PostAction`
 Expected: ALL PASS
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add harness/guardrails/post_action.py tests/test_guardrails.py
@@ -2067,7 +2067,7 @@ git commit -m "feat: add post-action guards (diff size, test deletion)"
 - Consumes: `ToolCall` from schemas
 - Produces: `HitlHandler` protocol, `AutoApproveHitl`, `BlockingHitl` (for WebUI) — injected into `PreActionGuard`
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```python
 # tests/test_hitl.py
@@ -2139,12 +2139,12 @@ def test_blocking_hitl_captures_tool_call():
     t.join()
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `pytest tests/test_hitl.py -v`
 Expected: FAIL
 
-- [ ] **Step 3: Implement HITL mechanism**
+- [x] **Step 3: Implement HITL mechanism**
 
 ```python
 # harness/guardrails/hitl.py
@@ -2199,12 +2199,12 @@ class BlockingHitl(HitlHandler):
         self._event.set()
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `pytest tests/test_hitl.py -v`
 Expected: ALL PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add harness/guardrails/hitl.py tests/test_hitl.py

@@ -64,6 +64,14 @@
 | config 支持全局+项目覆盖 | ✅ |
 | 零 critical issue | ✅
 
+## Task 9-11 | 2026-07-17
+
+- **时间戳**: 2026-07-17
+- **触发的 Superpowers 技能**: subagent-driven-development, test-driven-development
+- **关键 prompt/context 配置**: 在 feature/task-9-11 worktree 中执行，遵循 AGENTS.md 约束
+- **commit hash**: 4895539
+- **人工干预**: 无
+- **学到的教训**: 并行 worktree 中 pip install 可能超时，复用主 worktree 的 .venv 可解决
 ## Task 5-8 | 2026-07-17
 
 - **时间戳**: 2026-07-17
@@ -78,6 +86,11 @@
 **Stage 1: Spec 合规**
 | 检查项 | 结果 |
 |--------|------|
+| GuardrailRules: is_blacklisted / exceeds_limits / requires_approval | ✅ |
+| PreActionGuard: blacklist → limits → HITL 三级检查链 | ✅ |
+| PostActionGuard: diff size + test deletion 检查 | ✅ |
+| HITL: AutoApproveHitl + BlockingHitl (timeout) | ✅ |
+| 21 个测试（16 guardrails + 5 HITL） | ✅ |
 | Tool 协议 (base.py) 与 SPEC 一致 | ✅ |
 | Dispatcher (dispatcher.py) 注册/执行/异常处理 | ✅ |
 | 5 个工具 (read_file, glob, grep, edit_file, run_command) 实现 | ✅ |
@@ -90,6 +103,9 @@
 **Stage 2: 代码质量**
 | 检查项 | 结果 |
 |--------|------|
+| 49/49 tests pass | ✅ |
+| HITL 可 mock（MockHitl） | ✅ |
+| BlockingHitl 线程安全（threading.Event） | ✅ |
 | 47/47 tests pass | ✅ |
 | TDD 完整：每个模块先写测试、验证失败、再实现 | ✅ |
 | 无冗余代码 | ✅ |
