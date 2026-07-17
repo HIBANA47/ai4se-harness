@@ -19,17 +19,23 @@ cd ../harness-task-N
 ### 完成后
 
 1. **更新 PLAN.md**：把本 Task 的 `- [ ]` 改为 `- [x]`，附 commit hash
-2. **更新 AGENT_LOG.md**，每条记录必须包含以下 6 个字段（缺一扣分）：
+2. **更新 AGENT_LOG.md**，每条记录必须包含以下 7 个字段（缺一扣分）：
    - 时间戳 + task 编号
    - 触发的 Superpowers 技能（如 `subagent-driven-development`、`test-driven-development`）
    - 关键 prompt / context 配置
    - commit hash
+   - **两阶段评审结果**：先 spec 合规检查（数据模型/接口是否与 SPEC 一致），再代码质量检查（TDD 是否完整、有无冗余代码）。两者都 ✅ 才能继续。
    - 人工干预（修改了什么、为什么）
    - 学到的教训
-3. **合并回 main**（PR 或 merge），然后清理 worktree：
+3. **推送分支到 origin，不要本地 merge**：
    ```bash
+   git push origin feature/task-N
+   # 然后通知用户在 GitHub 网页上手动合并 PR
+   # 用户合并后，清理 worktree：
    git worktree remove ../harness-task-N
    ```
+
+> **绝对不要自己执行 `git merge` 到 main。** 推送 feature 分支后停下来，让用户在 GitHub 上手动点合并按钮。这是 PR 工作流的硬性要求。
 
 ---
 
