@@ -21,6 +21,24 @@
 - `hitl_timeout` = 300 seconds (default)
 - Memory persists to `~/.cache/harness/memory.json`
 
+## Global Workflow Checklist（每个 Task 必须执行）
+
+以下检查清单适用于所有 Task，与代码步骤同等重要。冷启动验证暴露的问题：如果 PLAN 只写代码步骤不写工作流纪律，执行 agent 会跳过这些步骤。
+
+**开工前：**
+- [ ] 使用 `git worktree add` 创建 feature 分支（如 `feature/task-N`），不在 main 分支直接开发
+
+**完成后：**
+- [ ] 在本 Task 的 `- [ ]` 改为 `- [x]`，附 commit hash
+- [ ] 更新 `AGENT_LOG.md`，每条记录必须包含：
+  - 时间戳 + task 编号
+  - 触发的 Superpowers 技能（如 `subagent-driven-development`、`test-driven-development`）
+  - 关键 prompt / context 配置
+  - commit hash
+  - 人工干预（修改了什么、为什么）
+  - 学到的教训
+- [ ] 合并回 main（通过 PR 或 `git merge`），清理 worktree
+
 ---
 
 ## File Structure
@@ -84,7 +102,9 @@ harness/                        # project root
 │   └── test_web.py
 ├── demos/
 │   └── mechanism_demo.py       # Mock LLM mechanism demonstration
-├── .harness.yaml               # Example project config
+├── .harness.example.yaml       # Example project config (committed)
+├── AGENT_LOG.md                 # Process log
+├── README.md
 ├── pyproject.toml
 ├── Dockerfile
 ├── .gitlab-ci.yml
@@ -94,8 +114,6 @@ harness/                        # project root
 ---
 
 ## Task 1: Project Scaffolding
-
-> **Status:** ✅ Done — commit 420259e (branch: feature/infrastructure)
 
 **Files:**
 - Create: `pyproject.toml`
@@ -110,6 +128,9 @@ harness/                        # project root
 - Create: `harness/web/__init__.py`
 - Create: `tests/__init__.py`
 - Create: `.env.example`
+- Create: `.harness.example.yaml` (示例配置，提交到仓库)
+- Create: `AGENT_LOG.md`
+- Create: `.gitlab-ci.yml`
 
 **Interfaces:**
 - Produces: package structure that all subsequent tasks import from
@@ -161,7 +182,8 @@ __pycache__/
 dist/
 *.egg-info/
 .pytest_cache/
-.harness.yaml
+.harness.local.yaml
+docs/superpowers/
 ```
 
 - [ ] **Step 3: Create .env.example**
@@ -197,11 +219,93 @@ git add -A
 git commit -m "chore: project scaffolding"
 ```
 
+- [ ] **Step 8: Create .harness.example.yaml**
+
+```yaml
+# .harness.example.yaml (示例配置，提交到仓库供参考)
+max_iterations: 5
+build_cmd: "python -m py_compile main.py"
+test_cmd: "pytest"
+build_timeout: 60
+test_timeout: 120
+allowed_tools:
+  - read_file
+  - edit_file
+  - run_command
+  - grep
+  - glob
+guardrails:
+  blacklist:
+    - .env
+    - .git
+    - secrets/
+  max_diff_lines: 100
+  require_approval_commands:
+    - rm
+    - del
+    - drop
+    - delete
+  max_command_timeout: 120
+  max_command_memory_mb: 512
+  hitl_timeout: 300
+convergence:
+  stagnation_limit: 3
+  no_edit_limit: 3
+llm:
+  provider: openai_compatible
+  model: gpt-4o
+  base_url: null
+max_feedback_lines: 50
+```
+
+- [ ] **Step 9: Create AGENT_LOG.md**
+
+```markdown
+# AGENT_LOG.md
+
+<!-- 每个 Task 完成后追加一条记录，格式如下 -->
+<!-- 时间戳 + task 编号 | 触发的技能 | prompt/context | commit hash | 人工干预 | 教训 -->
+```
+
+- [ ] **Step 10: Create .gitlab-ci.yml**
+
+```yaml
+stages:
+  - test
+  - build
+
+unit-test:
+  stage: test
+  image: python:3.11-slim
+  before_script:
+    - pip install -e ".[dev]"
+  script:
+    - pytest tests/ -v --tb=short
+  artifacts:
+    reports:
+      junit: pytest-report.xml
+
+docker-build:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -t harness-agent .
+  only:
+    - main
+```
+
+- [ ] **Step 11: Commit**
+
+```bash
+git add -A
+git commit -m "chore: project scaffolding (scaffold + CI + AGENT_LOG)"
+```
+
 ---
 
 ## Task 2: Data Models
-
-> **Status:** ✅ Done — commit 420259e (branch: feature/infrastructure)
 
 **Files:**
 - Create: `harness/llm/schemas.py`
@@ -407,16 +511,13 @@ git commit -m "feat: add core data models (ToolCall, ToolResult, LLMResponse, Me
 
 ## Task 3: Configuration Loading
 
-> **Status:** ✅ Done — commit 420259e (branch: feature/infrastructure)
-
 **Files:**
 - Create: `harness/core/config.py`
 - Test: `tests/test_config.py`
-- Create: `.harness.yaml` (example)
 
 **Interfaces:**
 - Consumes: `harness/llm/schemas.py` (no types, standalone)
-- Produces: `HarnessConfig`, `load_config()`, `GuardrailsConfig`, `FeedbackConfig`, `ConvergenceConfig`, `LLMConfig` — used by loop, guardrails, feedback, convergence, LLM client
+- Produces: `HarnessConfig`, `load_config()`, `GuardrailsConfig`, `ConvergenceConfig`, `LLMConfig` — used by loop, guardrails, feedback, convergence, LLM client
 
 - [ ] **Step 1: Write failing tests**
 
@@ -658,57 +759,16 @@ def load_config(
 Run: `pytest tests/test_config.py -v`
 Expected: ALL PASS
 
-- [ ] **Step 5: Create example .harness.yaml**
-
-```yaml
-# .harness.yaml (example project configuration)
-max_iterations: 5
-build_cmd: "python -m py_compile main.py"
-test_cmd: "pytest"
-build_timeout: 60
-test_timeout: 120
-allowed_tools:
-  - read_file
-  - edit_file
-  - run_command
-  - grep
-  - glob
-guardrails:
-  blacklist:
-    - .env
-    - .git
-    - secrets/
-  max_diff_lines: 100
-  require_approval_commands:
-    - rm
-    - del
-    - drop
-    - delete
-  max_command_timeout: 120
-  max_command_memory_mb: 512
-  hitl_timeout: 300
-convergence:
-  stagnation_limit: 3
-  no_edit_limit: 3
-llm:
-  provider: openai_compatible
-  model: gpt-4o
-  base_url: null
-max_feedback_lines: 50
-```
-
-- [ ] **Step 6: Commit**
+- [ ] **Step 5: Commit**
 
 ```bash
-git add harness/core/config.py tests/test_config.py .harness.yaml
+git add harness/core/config.py tests/test_config.py
 git commit -m "feat: add configuration loading with global + project override"
 ```
 
 ---
 
 ## Task 4: Memory Module
-
-> **Status:** ✅ Done — commit 3ca9878 (branch: feature/memory)
 
 **Files:**
 - Create: `harness/core/memory.py`
@@ -927,8 +987,6 @@ git commit -m "feat: add memory module with JSON persistence"
 
 ## Task 5: Tool Protocol & Dispatcher
 
-> **Status:** ✅ Done — commit 1830d5c (branch: feature/tools)
-
 **Files:**
 - Create: `harness/tools/base.py`
 - Create: `harness/tools/dispatcher.py`
@@ -1091,8 +1149,6 @@ git commit -m "feat: add tool protocol and dispatcher"
 ---
 
 ## Task 6: Tools — read_file, glob, grep
-
-> **Status:** ✅ Done — commit 1830d5c (branch: feature/tools)
 
 **Files:**
 - Create: `harness/tools/read_file.py`
@@ -1361,8 +1417,6 @@ git commit -m "feat: add read_file, glob, and grep tools"
 
 ## Task 7: Tools — edit_file (3-state matching)
 
-> **Status:** ✅ Done — commit 1830d5c (branch: feature/tools)
-
 **Files:**
 - Create: `harness/tools/edit_file.py`
 
@@ -1515,8 +1569,6 @@ git commit -m "feat: add edit_file tool with 3-state matching"
 ---
 
 ## Task 8: Tools — run_command (with timeout)
-
-> **Status:** ✅ Done — commit 1830d5c (branch: feature/tools)
 
 **Files:**
 - Create: `harness/tools/run_command.py`

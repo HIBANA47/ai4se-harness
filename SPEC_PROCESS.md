@@ -193,32 +193,49 @@ Brainstorming 技能帮助我从"模糊想法"走向"具体 spec"，核心贡献
 
 ## 冷启动验证结果
 
-于 2026-07-17 用另一个 agent（独立 session，无对话历史）完成验证。
+于 2026-07-17 完成两轮验证。第一轮由冷启动 agent 完成代码实现，第二轮由独立 agent 做交付物合规审查。
 
-### 验证 agent 信息
+### 第一轮：代码实现
 
 - **Agent 类型：** 独立 session（非原 agent）
 - **输入文件：** SPEC.md + PLAN.md 仅两个文件
 - **执行 Task：** Task 1（脚手架）、Task 2（数据模型）、Task 3（配置加载）
+- **代码结果：** 23 个测试全部通过，TDD 红绿循环正常执行
 
-### 结果
+暴露的环境层面问题：
 
-23 个测试全部通过，**零暂停点**。新 agent 无需提问即可自主推进。
-
-### 暴露的 spec/plan 缺陷
-
-| 缺陷 | 修复 |
+| 问题 | 修复 |
 |------|------|
 | Plan Task 1 缺 venv 创建步骤 | 已补充 `python3 -m venv .venv` 和激活命令 |
 | Plan Task 1 的 git init 无判断 | 已改为 `git rev-parse --is-inside-work-tree 2>/dev/null \|\| git init` |
-| pytest-asyncio 版本锁定 | 已改为 `>=0.24.0` |
+| pytest-asyncio 版本兼容 | 已改为 `>=0.24.0` |
+
+### 第二轮：交付物合规审查
+
+代码跑通不等于交付物合规。第二轮对照课程文档 §4.6–§4.9 和 §五 清单逐项检查，发现以下问题：
+
+| 合规项 | 状态 | 问题 |
+|--------|------|------|
+| Git worktree / PR 工作流（§4.6/§4.7） | ❌ 不合规 | 所有工作直接在 main 分支完成，未使用 worktree，未通过 PR 合并 |
+| AGENT_LOG.md 格式（§4.9） | ⚠️ 不完整 | 存在但仅 1 条记录，缺少"触发的技能"、"prompt/context 配置"、"学到的教训"等必填字段 |
+| PLAN.md checkbox 更新（§4.7） | ❌ 未更新 | Status 行标记了 Done，但 step checkbox `- [ ]` 未改为 `- [x]` |
+| `.harness.yaml` gitignore 矛盾 | ⚠️ 逻辑冲突 | `.gitignore` 排除了 `.harness.yaml`，但示例文件又被提交到仓库 |
+| CI 配置（§五.6） | ❌ 不存在 | 无 `.gitlab-ci.yml`，无 `unit-test` job |
+| README.md（§五.4） | ❌ 不存在 | 项目无 README |
+| `docs/superpowers/` 重复文档 | ⚠️ 冗余 | Superpowers 自动生成的 SPEC/PLAN 副本与根目录交付物重复 |
+| PLAN Task 3 Interfaces 描述 | ⚠️ 不准确 | 提到 `FeedbackConfig` 但实现中不存在此类 |
 
 ### 反思
 
-Spec 和 Plan 的清晰度通过了冷启动验证——新 agent 能直接上手，无需额外解释。暴露的 3 个问题都是环境配置层面的细节，而非设计层面的缺陷，说明 spec 本身足够健壮。
+第一轮验证只看了"代码能不能跑"，完全没有检查工作流合规性。冷启动 agent 自己也没有使用 worktree 或创建规范的 AGENT_LOG.md——因为 PLAN 中缺少对这些流程的明确指示。这导致第一轮报告给出了"零暂停点、验证通过"的过于乐观的结论。
+
+根本原因是 PLAN 只关注了代码层面的 TDD 步骤，没有把课程要求的工作流纪律（worktree、PR、AGENT_LOG 格式、checkbox 更新）写进每个 task 的执行流程中。冷启动 agent 无从知晓这些要求。
+
+教训：冷启动验证不能只测代码可运行性，必须同时检查交付物合规性。否则"代码跑通但工作流违规"的问题会一直藏到最后。
 
 ### 对 SPEC/PLAN 的修订
 
 - PLAN.md: Task 1 Step 5 增加了 venv 创建步骤
 - PLAN.md: Task 1 Step 7 增加了 git init 判断
 - PLAN.md: pyproject.toml 的 pytest-asyncio 版本锁定为 `>=0.24.0`
+- 已回退 Task 1-3 的实现代码和 git 记录，待按新流程（worktree + PR）重新实现
