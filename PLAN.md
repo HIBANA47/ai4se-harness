@@ -996,10 +996,7 @@ git commit -m "feat: add memory module with JSON persistence"
 - Consumes: `ToolCall`, `ToolResult` from `harness/llm/schemas.py`
 - Produces: `Tool` protocol, `Dispatcher` class — used by `loop.py`, all individual tool implementations
 
-- [ ] **Step 1: Write failing tests**
-
-```python
-# tests/test_dispatcher.py
+- [x] **Step 1: Write failing tests** (feaf687)
 import pytest
 
 from harness.llm.schemas import ToolCall, ToolResult
@@ -1065,12 +1062,12 @@ def test_multiple_tools():
     assert len(schemas) == 2
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail** (feaf687)
 
 Run: `pytest tests/test_dispatcher.py -v`
 Expected: FAIL — `ModuleNotFoundError`
 
-- [ ] **Step 3: Implement Tool protocol**
+- [x] **Step 3: Implement Tool protocol** (feaf687)
 
 ```python
 # harness/tools/base.py
@@ -1097,7 +1094,7 @@ class Tool(ABC):
         ...
 ```
 
-- [ ] **Step 4: Implement Dispatcher**
+- [x] **Step 4: Implement Dispatcher** (feaf687)
 
 ```python
 # harness/tools/dispatcher.py
@@ -1134,12 +1131,12 @@ class Dispatcher:
         ]
 ```
 
-- [ ] **Step 5: Run tests to verify they pass**
+- [x] **Step 5: Run tests to verify they pass** (feaf687)
 
 Run: `pytest tests/test_dispatcher.py -v`
 Expected: ALL PASS
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit** (feaf687)
 
 ```bash
 git add harness/tools/base.py harness/tools/dispatcher.py tests/test_dispatcher.py
@@ -1160,7 +1157,7 @@ git commit -m "feat: add tool protocol and dispatcher"
 - Consumes: `Tool` protocol from `harness/tools/base.py`, `ToolResult` from `harness/llm/schemas.py`
 - Produces: `ReadFileTool`, `GlobTool`, `GrepTool` — registered into Dispatcher
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests** (feaf687)
 
 ```python
 # tests/test_tools.py
@@ -1260,12 +1257,12 @@ def test_grep_no_matches(sandbox):
     assert result.data == []
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail** (feaf687)
 
 Run: `pytest tests/test_tools.py -v`
 Expected: FAIL
 
-- [ ] **Step 3: Implement ReadFileTool**
+- [x] **Step 3: Implement ReadFileTool** (feaf687)
 
 ```python
 # harness/tools/read_file.py
@@ -1304,7 +1301,7 @@ class ReadFileTool(Tool):
         return ToolResult(success=True, data=resolved.read_text())
 ```
 
-- [ ] **Step 4: Implement GlobTool**
+- [x] **Step 4: Implement GlobTool** (feaf687)
 
 ```python
 # harness/tools/glob_tool.py
@@ -1341,7 +1338,7 @@ class GlobTool(Tool):
         return ToolResult(success=True, data=sorted(matches))
 ```
 
-- [ ] **Step 5: Implement GrepTool**
+- [x] **Step 5: Implement GrepTool** (feaf687)
 
 ```python
 # harness/tools/grep_tool.py
@@ -1401,12 +1398,12 @@ class GrepTool(Tool):
         return ToolResult(success=True, data=matches)
 ```
 
-- [ ] **Step 6: Run tests to verify they pass**
+- [x] **Step 6: Run tests to verify they pass** (feaf687)
 
 Run: `pytest tests/test_tools.py -v`
 Expected: ALL PASS
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit** (feaf687)
 
 ```bash
 git add harness/tools/read_file.py harness/tools/glob_tool.py harness/tools/grep_tool.py tests/test_tools.py
@@ -1424,7 +1421,7 @@ git commit -m "feat: add read_file, glob, and grep tools"
 - Consumes: `Tool` protocol, `ToolResult`
 - Produces: `EditFileTool` — registered into Dispatcher. Result `data` includes `{"diff": "..."}`.
 
-- [ ] **Step 1: Add edit_file tests to test_tools.py**
+- [x] **Step 1: Add edit_file tests to test_tools.py** (feaf687)
 
 ```python
 # Append to tests/test_tools.py
@@ -1492,7 +1489,7 @@ def test_edit_file_produces_diff(sandbox):
     assert "+def add(a: int, b: int):" in result.data["diff"]
 ```
 
-- [ ] **Step 2: Implement EditFileTool**
+- [x] **Step 2: Implement EditFileTool** (feaf687)
 
 ```python
 # harness/tools/edit_file.py
@@ -1554,12 +1551,12 @@ class EditFileTool(Tool):
         return ToolResult(success=True, data={"diff": diff_str, "path": path})
 ```
 
-- [ ] **Step 3: Run tests to verify they pass**
+- [x] **Step 3: Run tests to verify they pass** (feaf687)
 
 Run: `pytest tests/test_tools.py -v -k edit_file`
 Expected: ALL PASS
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit** (feaf687)
 
 ```bash
 git add harness/tools/edit_file.py tests/test_tools.py
@@ -1577,7 +1574,7 @@ git commit -m "feat: add edit_file tool with 3-state matching"
 - Consumes: `Tool` protocol, `ToolResult`
 - Produces: `RunCommandTool` — registered into Dispatcher. Returns `exit_code`, `stdout`, `stderr` in `data`.
 
-- [ ] **Step 1: Add run_command tests to test_tools.py**
+- [x] **Step 1: Add run_command tests to test_tools.py** (feaf687)
 
 ```python
 # Append to tests/test_tools.py
@@ -1623,7 +1620,7 @@ def test_run_command_runs_in_sandbox(sandbox):
     assert "hi" in result.data["stdout"]
 ```
 
-- [ ] **Step 2: Implement RunCommandTool**
+- [x] **Step 2: Implement RunCommandTool** (feaf687)
 
 ```python
 # harness/tools/run_command.py
@@ -1673,12 +1670,12 @@ class RunCommandTool(Tool):
             return ToolResult(success=False, error=str(e))
 ```
 
-- [ ] **Step 3: Run tests to verify they pass**
+- [x] **Step 3: Run tests to verify they pass** (feaf687)
 
 Run: `pytest tests/test_tools.py -v -k run_command`
 Expected: ALL PASS
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit** (feaf687)
 
 ```bash
 git add harness/tools/run_command.py tests/test_tools.py

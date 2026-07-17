@@ -32,3 +32,36 @@
 | LLMResponse 支持 parse_error | ✅ |
 | config 支持全局+项目覆盖 | ✅ |
 | 零 critical issue | ✅
+
+## Task 5-8 | 2026-07-17
+
+- **时间戳**: 2026-07-17
+- **触发的 Superpowers 技能**: test-driven-development
+- **关键 prompt/context 配置**: 在 feature/task-5-8 worktree 中执行，遵循 AGENTS.md 约束 + PLAN.md 中 Task 5-8 的实现步骤
+- **commit hash**: feaf687
+- **人工干预**: 无。严格按 PLAN.md 步骤实现，每步 TDD 红-绿循环。
+- **学到的教训**: PLAN.md 中 checkbox 批量替换需谨慎，使用 replaceAll 容易误改其他 Task 的步骤；需提供足够上下文确保唯一性。
+
+### 两阶段评审
+
+**Stage 1: Spec 合规**
+| 检查项 | 结果 |
+|--------|------|
+| Tool 协议 (base.py) 与 SPEC 一致 | ✅ |
+| Dispatcher (dispatcher.py) 注册/执行/异常处理 | ✅ |
+| 5 个工具 (read_file, glob, grep, edit_file, run_command) 实现 | ✅ |
+| edit_file 3-state 匹配 (0, 1, >1) | ✅ |
+| run_command 支持 timeout | ✅ |
+| 所有工具继承 Tool 基类 | ✅ |
+| 沙箱路径验证 (sandbox enforcement) | ✅ |
+| 47 个测试全部通过 (23 existing + 5 dispatcher + 9 tools + 5 edit_file + 5 run_command) | ✅ |
+
+**Stage 2: 代码质量**
+| 检查项 | 结果 |
+|--------|------|
+| 47/47 tests pass | ✅ |
+| TDD 完整：每个模块先写测试、验证失败、再实现 | ✅ |
+| 无冗余代码 | ✅ |
+| 类型注解完整 | ✅ |
+| 错误处理覆盖（unknown_tool, exception, sandbox, timeout, regex） | ✅ |
+| 零 critical issue | ✅
