@@ -776,9 +776,7 @@ git commit -m "feat: add configuration loading with global + project override"
 
 **Interfaces:**
 - Consumes: `ToolCall`, `ToolResult`, `MemoryEntry` from `harness/llm/schemas.py`
-- Produces: `Memory` class — used by `loop.py` for conversation history management
-
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```python
 # tests/test_memory.py
@@ -882,12 +880,12 @@ def test_empty_memory_prompt_context():
     assert ctx == ""
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `pytest tests/test_memory.py -v`
 Expected: FAIL — `ModuleNotFoundError`
 
-- [ ] **Step 3: Implement memory module**
+- [x] **Step 3: Implement memory module**
 
 ```python
 # harness/core/memory.py
@@ -971,12 +969,12 @@ class Memory:
         return MemoryEntry(type=d["type"], tool_call=tc, result=tr, reason=d.get("reason"))
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `pytest tests/test_memory.py -v`
 Expected: ALL PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add harness/core/memory.py tests/test_memory.py
