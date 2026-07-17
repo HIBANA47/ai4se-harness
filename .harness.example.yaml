@@ -1,0 +1,33 @@
+max_iterations: 5
+build_cmd: "python -m py_compile main.py"
+test_cmd: "pytest"
+build_timeout: 60
+test_timeout: 120
+allowed_tools:
+  - read_file
+  - edit_file
+  - run_command
+  - grep
+  - glob
+guardrails:
+  blacklist:
+    - .env
+    - .git
+    - secrets/
+  max_diff_lines: 100
+  require_approval_commands:
+    - rm
+    - del
+    - drop
+    - delete
+  max_command_timeout: 120
+  max_command_memory_mb: 512
+  hitl_timeout: 300
+convergence:
+  stagnation_limit: 3
+  no_edit_limit: 3
+llm:
+  provider: openai_compatible
+  model: gpt-4o
+  base_url: null
+max_feedback_lines: 50
