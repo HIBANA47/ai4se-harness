@@ -1,5 +1,13 @@
 # AGENT_LOG.md
 
+## Task 12-15 | 2026-07-17
+
+- **时间戳**: 2026-07-17
+- **触发的 Superpowers 技能**: test-driven-development
+- **关键 prompt/context 配置**: 在 feature/task-12-15 worktree 中执行，使用用户提供的详细实现指令
+- **commit hash**: d59f4fb
+- **人工干预**: 修复了 `test_no_build_cmd_configured` 缺少 mock 返回值导致 MagicMock 对象传给 re.search 的 TypeError；修复了 Convergence 中 stagnation_count 初值逻辑——第一轮 update 也需要计数（设置 stagnation_count=1），否则 limit=3 时需要 4 轮才触发停滞检测
+- **学到的教训**: 1) MagicMock 未设置 return_value 时所有属性访问返回 MagicMock，不能传给正则引擎；2) 停滞检测的语义是"连续 N 轮无改善"，第一轮应算入计数而非从第二轮开始；3) 合并多个 Task 到一个 commit 时需确保所有步骤的 `- [ ]` 都改为 `- [x]`
 ## Task 4 | 2026-07-17
 
 - **时间戳**: 2026-07-17
@@ -14,6 +22,15 @@
 **Stage 1: Spec 合规**
 | 检查项 | 结果 |
 |--------|------|
+| Parsers 支持 Python Traceback/SyntaxError/ValueError 解析 | ✅ |
+| Parsers 支持 pytest 输出解析（FAILED/AssertionError/E assert） | ✅ |
+| Pipeline 实现 build→test 短路（build 失败跳过 test） | ✅ |
+| Pipeline 支持无 build_cmd 或无 test_cmd 配置 | ✅ |
+| Convergence 支持 max_iterations/stagnation/no_edits 三种停止条件 | ✅ |
+| Convergence 误差减少时重置停滞计数 | ✅ |
+| LLMClient Protocol 定义 complete() 接口 | ✅ |
+| MockLLM 预置响应队列 + call_count 跟踪 | ✅ |
+| FeedbackResult/FixResult/GuardResult 数据模型与 SPEC 一致 | ✅ |
 | Memory 类有 append/append_rejection/append_violation 方法 | ✅ |
 | Memory 类有 get_diff_from_history/to_prompt_context/save/load 方法 | ✅ |
 | MemoryEntry 含 type/tool_call/result/reason 字段 | ✅ |
@@ -24,6 +41,11 @@
 **Stage 2: 代码质量**
 | 检查项 | 结果 |
 |--------|------|
+| 43/43 tests pass (23 existing + 7 parsers + 6 pipeline + 7 convergence) | ✅ |
+| 类型注解完整（Protocol、list[dict] 等） | ✅ |
+| 零 critical issue | ✅ |
+| mock-LLM 可脱离真实 LLM 运行 | ✅ |
+| 正则模式使用 re.compile 预编译 | ✅ |
 | 9/9 新测试通过 | ✅ |
 | 32/32 全量测试通过（23 已有 + 9 新增） | ✅ |
 | TDD 完整：RED（ModuleNotFoundError）→ GREEN（全通过） | ✅ |
