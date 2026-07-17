@@ -135,7 +135,7 @@ harness/                        # project root
 **Interfaces:**
 - Produces: package structure that all subsequent tasks import from
 
-- [ ] **Step 1: Create pyproject.toml**
+- [x] **Step 1: Create pyproject.toml** (ce99bb9)
 
 ```toml
 [project]
@@ -172,7 +172,7 @@ asyncio_mode = "auto"
 testpaths = ["tests"]
 ```
 
-- [ ] **Step 2: Create .gitignore**
+- [x] **Step 2: Create .gitignore** (ce99bb9)
 
 ```
 __pycache__/
@@ -186,18 +186,18 @@ dist/
 docs/superpowers/
 ```
 
-- [ ] **Step 3: Create .env.example**
+- [x] **Step 3: Create .env.example** (ce99bb9)
 
 ```
 LLM_API_KEY=your-api-key-here
 LLM_BASE_URL=https://api.example.com/v1
 ```
 
-- [ ] **Step 4: Create all __init__.py files**
+- [x] **Step 4: Create all __init__.py files** (ce99bb9)
 
 Create empty `__init__.py` in: `harness/`, `harness/core/`, `harness/llm/`, `harness/tools/`, `harness/guardrails/`, `harness/feedback/`, `harness/security/`, `harness/web/`, `tests/`
 
-- [ ] **Step 5: Create virtual environment and install project**
+- [x] **Step 5: Create virtual environment and install project** (ce99bb9)
 
 ```bash
 python3 -m venv .venv
@@ -206,12 +206,12 @@ pip install -e ".[dev]"
 ```
 Expected: SUCCESS, package installed
 
-- [ ] **Step 6: Verify pytest runs**
+- [x] **Step 6: Verify pytest runs** (ce99bb9)
 
 Run: `pytest --co`
 Expected: "no tests collected" (but no errors)
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit** (ce99bb9)
 
 ```bash
 git rev-parse --is-inside-work-tree 2>/dev/null || git init
@@ -219,7 +219,7 @@ git add -A
 git commit -m "chore: project scaffolding"
 ```
 
-- [ ] **Step 8: Create .harness.example.yaml**
+- [x] **Step 8: Create .harness.example.yaml** (ce99bb9)
 
 ```yaml
 # .harness.example.yaml (示例配置，提交到仓库供参考)
@@ -258,7 +258,7 @@ llm:
 max_feedback_lines: 50
 ```
 
-- [ ] **Step 9: Create AGENT_LOG.md**
+- [x] **Step 9: Create AGENT_LOG.md** (ce99bb9)
 
 ```markdown
 # AGENT_LOG.md
@@ -267,7 +267,7 @@ max_feedback_lines: 50
 <!-- 时间戳 + task 编号 | 触发的技能 | prompt/context | commit hash | 人工干预 | 教训 -->
 ```
 
-- [ ] **Step 10: Create .gitlab-ci.yml**
+- [x] **Step 10: Create .gitlab-ci.yml** (ce99bb9)
 
 ```yaml
 stages:
@@ -296,7 +296,7 @@ docker-build:
     - main
 ```
 
-- [ ] **Step 11: Commit**
+- [x] **Step 11: Commit** (ce99bb9)
 
 ```bash
 git add -A
@@ -315,7 +315,7 @@ git commit -m "chore: project scaffolding (scaffold + CI + AGENT_LOG)"
 - Consumes: nothing
 - Produces: `ToolCall`, `ToolResult`, `LLMResponse`, `MemoryEntry`, `FeedbackResult`, `FixResult`, `GuardResult` — used by every other module
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests** (ce99bb9)
 
 ```python
 # tests/test_schemas.py
@@ -429,12 +429,12 @@ def test_guard_result_denied():
     assert gr.allowed is False
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail** (ce99bb9)
 
 Run: `pytest tests/test_schemas.py -v`
 Expected: FAIL — `ModuleNotFoundError: No module named 'harness.llm.schemas'`
 
-- [ ] **Step 3: Implement data models**
+- [x] **Step 3: Implement data models** (ce99bb9)
 
 ```python
 # harness/llm/schemas.py
@@ -495,12 +495,12 @@ class GuardResult:
     reason: str = ""
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass** (ce99bb9)
 
 Run: `pytest tests/test_schemas.py -v`
 Expected: ALL PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit** (ce99bb9)
 
 ```bash
 git add harness/llm/schemas.py tests/test_schemas.py
@@ -519,7 +519,7 @@ git commit -m "feat: add core data models (ToolCall, ToolResult, LLMResponse, Me
 - Consumes: `harness/llm/schemas.py` (no types, standalone)
 - Produces: `HarnessConfig`, `load_config()`, `GuardrailsConfig`, `ConvergenceConfig`, `LLMConfig` — used by loop, guardrails, feedback, convergence, LLM client
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests** (ce99bb9)
 
 ```python
 # tests/test_config.py
@@ -641,12 +641,12 @@ def test_missing_both_configs(tmp_path):
     assert isinstance(cfg, HarnessConfig)
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail** (ce99bb9)
 
 Run: `pytest tests/test_config.py -v`
 Expected: FAIL — `ModuleNotFoundError`
 
-- [ ] **Step 3: Implement configuration**
+- [x] **Step 3: Implement configuration** (ce99bb9)
 
 ```python
 # harness/core/config.py
@@ -754,12 +754,12 @@ def load_config(
     )
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass** (ce99bb9)
 
 Run: `pytest tests/test_config.py -v`
 Expected: ALL PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit** (ce99bb9)
 
 ```bash
 git add harness/core/config.py tests/test_config.py
