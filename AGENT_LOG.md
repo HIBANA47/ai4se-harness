@@ -1,5 +1,17 @@
 # AGENT_LOG.md
 
+## Task 20-21 | 2026-07-19
+
+- **时间戳**: 2026-07-19
+- **触发的 Superpowers 技能**: using-git-worktrees, executing-plans
+- **关键 prompt/context 配置**: 在 feature/task-20-21 worktree 中执行，使用用户提供的详细实现指令。Task 20 创建 Dockerfile（python:3.11-slim、uvicorn entrypoint）和 .dockerignore（排除 tests/docs/.git）；Task 21 验证已有 .gitlab-ci.yml（unit-test + docker-build 两阶段）
+- **commit hash**: 07303c4
+- **两阶段评审结果**:
+  - Stage 1 (Spec 合规): ✅ Dockerfile 使用 Python 3.11-slim 基础镜像，uvicorn 入口点 `harness.web.app:create_app --factory`，EXPOSE 8000；.dockerignore 排除 tests、docs、.git、__pycache__、.env、.venv、dist、*.egg-info、.pytest_cache；.gitlab-ci.yml 含 unit-test job（python:3.11-slim + pytest）和 docker-build job（docker:dind）
+  - Stage 2 (代码质量): ✅ Dockerfile 语法正确，create_app 可导入；全量 117 测试通过；CI 配置与用户指令一致（含 --junitxml）；Docker daemon 不在本地运行，但 Dockerfile 结构完整
+- **人工干预**: 无
+- **学到的教训**: Docker daemon 在本地未运行时无法验证 docker build，但 Dockerfile 结构可在 CI 中验证；.gitlab-ci.yml 已在早期 Task 创建，Task 21 仅需验证而非重新创建
+
 ## Task 19 | 2026-07-19
 
 - **时间戳**: 2026-07-19
