@@ -2757,7 +2757,7 @@ git commit -m "feat: add LLMClient protocol and MockLLM"
 
 This is the integration task that ties everything together.
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```python
 # tests/test_loop.py
@@ -2921,7 +2921,7 @@ class TestAgentParseError:
         assert llm.call_count == 2
 ```
 
-- [ ] **Step 2: Implement Agent loop**
+- [x] **Step 2: Implement Agent loop**
 
 ```python
 # harness/core/loop.py
@@ -3025,12 +3025,12 @@ class Agent:
         return f"Attempt {attempt}/{self.config.max_iterations} — {feedback.stage} FAILED:\n" + "\n".join(error_lines)
 ```
 
-- [ ] **Step 3: Run tests**
+- [x] **Step 3: Run tests**
 
 Run: `pytest tests/test_loop.py -v`
 Expected: ALL PASS
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit** (758272d)
 
 ```bash
 git add harness/core/loop.py tests/test_loop.py
