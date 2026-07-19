@@ -3726,22 +3726,22 @@ git commit -m "ci: add gitlab CI config (unit-test + docker-build)"
 **Files:**
 - Modify: all (run full suite)
 
-- [ ] **Step 1: Run full test suite**
+- [x] **Step 1: Run full test suite**
 
 Run: `pytest tests/ -v`
 Expected: ALL PASS
 
-- [ ] **Step 2: Run mechanism demo**
+- [x] **Step 2: Run mechanism demo**
 
 Run: `python demos/mechanism_demo.py`
 Expected: ALL DEMOS PASSED
 
-- [ ] **Step 3: Verify imports work**
+- [x] **Step 3: Verify imports work**
 
 Run: `python -c "from harness.core.loop import Agent; from harness.web.app import create_app; from harness.security.credentials import CredentialStore; print('All imports OK')"`
 Expected: `All imports OK`
 
-- [ ] **Step 4: Create README.md**
+- [x] **Step 4: Create README.md**
 
 ```markdown
 # Coding Agent Harness
