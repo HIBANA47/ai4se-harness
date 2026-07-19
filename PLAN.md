@@ -3187,12 +3187,12 @@ def first_run_setup(store: CredentialStore):
         print("No key provided. Agent will not be able to call LLM.")
 ```
 
-- [ ] **Step 4: Run tests**
+- [x] **Step 4: Run tests**
 
 Run: `pytest tests/test_credentials.py -v`
 Expected: ALL PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add harness/security/credentials.py harness/security/setup.py tests/test_credentials.py
@@ -3372,7 +3372,7 @@ def broadcast(event: dict):
 Run: `pytest tests/test_web.py -v`
 Expected: ALL PASS
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add harness/web/app.py harness/web/api.py tests/test_web.py
