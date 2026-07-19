@@ -1,5 +1,17 @@
 # AGENT_LOG.md
 
+## Task 17-18 | 2026-07-19
+
+- **时间戳**: 2026-07-19
+- **触发的 Superpowers 技能**: test-driven-development
+- **关键 prompt/context 配置**: 在 feature/task-17-18 worktree 中执行，使用用户提供的详细实现指令。Task 17 实现 CredentialStore（keyring + .env fallback）和 first_run_setup；Task 18 实现 FastAPI + HTMX WebUI（/、/api/status、/api/run、/ws WebSocket）
+- **commit hash**: b5e1e43
+- **两阶段评审结果**:
+  - Stage 1 (Spec 合规): ✅ CredentialStore 支持 keyring + .env 双存储、load/store/delete/status 方法、chmod 600 权限；first_run_setup 交互式获取 LLM_API_KEY；FastAPI app 含 index 页面（HTMX form）、/api/status、/api/run（需 bug_report）、/ws WebSocket（HITL 双向通信）
+  - Stage 2 (代码质量): ✅ 6 个 credentials 测试 + 3 个 web 测试全部通过，全量 117 测试通过；TDD 完整（RED: ModuleNotFoundError → GREEN: 全部通过）；keyring 降级到 .env 路径正确；无冗余代码
+- **人工干预**: 修复了测试中 `patch("harness.security.credentials.keyring", side_effect=Exception)` 不生效的问题——`keyring` 在实现中是 `if keyring:` 的 truthiness 检查而非 callable，改为 `patch(..., None)` 使降级路径生效
+- **学到的教训**: 1) `patch` 配合 `side_effect` 只对 callable 触发，对模块引用需要直接用 `None` 替换；2) FastAPI 的 `body: dict = None` 参数默认值会导致 FastAPI 将其视为查询参数而非 body，需用 `body: dict` 或 `Body()` 才能正确接收 JSON body
+
 ## Task 16 | 2026-07-19
 
 - **时间戳**: 2026-07-19
