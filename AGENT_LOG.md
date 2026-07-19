@@ -1,5 +1,17 @@
 # AGENT_LOG.md
 
+## Task 16 | 2026-07-19
+
+- **时间戳**: 2026-07-19
+- **触发的 Superpowers 技能**: test-driven-development
+- **关键 prompt/context 配置**: 在 feature/task-16 worktree 中执行，使用用户提供的详细实现指令。Agent 主循环集成 LLM、Dispatcher、PreActionGuard、PostActionGuard、Memory、FeedbackPipeline、Convergence 所有模块
+- **commit hash**: 758272d
+- **两阶段评审结果**:
+  - Stage 1 (Spec 合规): ✅ Agent 类含 run()、_build_prompt()、_build_feedback_context() 方法；集成 LLM complete()、dispatcher execute()/get_tools_schema()、pre_guard check()、post_guard check()、memory append/append_rejection/append_violation/get_diff_from_history()、pipeline run()、convergence update/should_stop()；正确处理 tool_use/fix_complete/parse_error 三种响应类型；web_notifier 可选参数贯穿全流程
+  - Stage 2 (代码质量): ✅ 6 个集成测试全部通过，MockLLM 贯穿全流程；test_max_iterations_stop 需使用可变错误计数+MockEditTool 避免 stagnation 和 no_edit 提前触发；test_stagnation_stop 使用 mock_tool 确保 no_edit 触发；test_rejected_tool_recorded_in_memory 验证黑名单被拒绝后记录到 memory；test_parse_error_skips_iteration 验证 parse_error 跳过迭代
+- **人工干预**: 修复了 `test_max_iterations_stop` 中因 stagnation/no_edit 计数提前触发导致无法到达 max_iterations 的问题——将同质错误改为交替错误计数（[1,2,1,2,...]）避免 stagnation，并注册 MockEditTool 以重置 no_edit 计数
+- **学到的教训**: 1) 集成测试中，Convergence 的 stagnation 和 no_edit 两个停止条件可能比 max_iterations 更早触发，需要仔细设计测试数据；2) 当 mock 工具名不是 "edit_file" 时，agent 循环中的 `had_edit` 永远为 False，需要为特定测试注册 `edit_file` 工具；3) 交替错误计数可防止 stagnation 但需确保交替模式足够长（≥ max_iterations）
+
 ## Task 12-15 | 2026-07-17
 
 - **时间戳**: 2026-07-17
