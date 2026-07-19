@@ -3390,7 +3390,7 @@ git commit -m "feat: add WebUI (FastAPI + HTMX + WebSocket, 3 MVP features)"
 - Consumes: Agent, MockLLM, all modules
 - Produces: runnable demo script showing 3 scenarios (per §A.6)
 
-- [ ] **Step 1: Implement demo script**
+- [x] **Step 1: Implement demo script** (commit: 64369fa)
 
 ```python
 # demos/mechanism_demo.py
@@ -3598,12 +3598,12 @@ if __name__ == "__main__":
     print("=" * 60)
 ```
 
-- [ ] **Step 2: Run demo**
+- [x] **Step 2: Run demo**
 
 Run: `python demos/mechanism_demo.py`
 Expected: All 3 demos print PASSED
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add demos/mechanism_demo.py
