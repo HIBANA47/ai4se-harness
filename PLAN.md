@@ -3050,7 +3050,7 @@ git commit -m "feat: add agent main loop (integrates all dimensions)"
 - Consumes: nothing (standalone)
 - Produces: `CredentialStore`, `first_run_setup()` — used by app startup
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests** (b5e1e43)
 
 ```python
 # tests/test_credentials.py
@@ -3100,7 +3100,7 @@ class TestCredentialStore:
         assert not (mode & stat.S_IROTH)
 ```
 
-- [ ] **Step 2: Implement credentials**
+- [x] **Step 2: Implement credentials** (b5e1e43)
 
 ```python
 # harness/security/credentials.py
@@ -3163,7 +3163,7 @@ class CredentialStore:
         return "stored" if val is not None else "not_set"
 ```
 
-- [ ] **Step 3: Implement first-run setup**
+- [x] **Step 3: Implement first-run setup** (b5e1e43)
 
 ```python
 # harness/security/setup.py
@@ -3187,12 +3187,12 @@ def first_run_setup(store: CredentialStore):
         print("No key provided. Agent will not be able to call LLM.")
 ```
 
-- [ ] **Step 4: Run tests**
+- [x] **Step 4: Run tests**
 
 Run: `pytest tests/test_credentials.py -v`
 Expected: ALL PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add harness/security/credentials.py harness/security/setup.py tests/test_credentials.py
@@ -3213,7 +3213,7 @@ git commit -m "feat: add credential store (keyring + .env) with first-run setup"
 - Consumes: `Agent` loop, `BlockingHitl` for approval; all schemas
 - Produces: FastAPI app, WebSocket endpoint, HITL approval flow
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests** (b5e1e43)
 
 ```python
 # tests/test_web.py
@@ -3256,7 +3256,7 @@ async def test_run_endpoint_requires_bug_report(client):
     assert resp.status_code in (400, 422)
 ```
 
-- [ ] **Step 2: Implement FastAPI app**
+- [x] **Step 2: Implement FastAPI app** (b5e1e43)
 
 ```python
 # harness/web/app.py
@@ -3367,12 +3367,12 @@ def broadcast(event: dict):
         asyncio.create_task(ws.send_json(event))
 ```
 
-- [ ] **Step 3: Run tests**
+- [x] **Step 3: Run tests** (b5e1e43)
 
 Run: `pytest tests/test_web.py -v`
 Expected: ALL PASS
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add harness/web/app.py harness/web/api.py tests/test_web.py
