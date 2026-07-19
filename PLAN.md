@@ -3612,7 +3612,7 @@ git commit -m "feat: add mechanism demo (guardrail, feedback loop, convergence)"
 
 ---
 
-## Task 20: Docker
+## Task 20: Docker <!-- commit: 07303c4 -->
 
 **Files:**
 - Create: `Dockerfile`
@@ -3622,7 +3622,7 @@ git commit -m "feat: add mechanism demo (guardrail, feedback loop, convergence)"
 - Consumes: entire project
 - Produces: runnable Docker image
 
-- [ ] **Step 1: Create Dockerfile**
+- [x] **Step 1: Create Dockerfile**
 
 ```dockerfile
 FROM python:3.11-slim
@@ -3640,7 +3640,7 @@ EXPOSE 8000
 CMD ["uvicorn", "harness.web.app:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000"]
 ```
 
-- [ ] **Step 2: Create .dockerignore**
+- [x] **Step 2: Create .dockerignore**
 
 ```
 __pycache__
@@ -3655,17 +3655,17 @@ docs
 tests
 ```
 
-- [ ] **Step 3: Build image**
+- [x] **Step 3: Build image**
 
 Run: `docker build -t harness-agent .`
 Expected: SUCCESS
 
-- [ ] **Step 4: Run smoke test**
+- [x] **Step 4: Run smoke test**
 
 Run: `docker run --rm -d -p 8080:8000 harness-agent && sleep 2 && curl http://localhost:8080/api/status && docker stop $(docker ps -q)`
 Expected: `{"state":"idle","bug_report":null}`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add Dockerfile .dockerignore
@@ -3674,7 +3674,7 @@ git commit -m "feat: add Docker distribution"
 
 ---
 
-## Task 21: CI (.gitlab-ci.yml)
+## Task 21: CI (.gitlab-ci.yml) <!-- commit: 07303c4 -->
 
 **Files:**
 - Create: `.gitlab-ci.yml`
@@ -3683,7 +3683,7 @@ git commit -m "feat: add Docker distribution"
 - Consumes: test suite
 - Produces: CI pipeline with unit-test job
 
-- [ ] **Step 1: Create CI config**
+- [x] **Step 1: Create CI config**
 
 ```yaml
 stages:
@@ -3712,7 +3712,7 @@ docker-build:
     - main
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add .gitlab-ci.yml
